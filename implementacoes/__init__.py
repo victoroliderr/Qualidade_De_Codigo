@@ -1,1 +1,1 @@
-"""Implementações usadas pelo Laboratório de Qualidade do Código."""
+"""Implementações do Laboratório de Qualidade do Código e Refatoração."""

@@ -1,0 +1,26 @@
+:root[data-theme="light"]{--bg:#ffffff;--text:#111;--muted:#555;--border:#e5e5e5;--accent:#2563eb;}
+:root[data-theme="dark"],:root:not([data-theme]){--bg:#0b0f19;--text:#f1f5f9;--muted:#94a3b8;--border:#1f2937;--accent:#60a5fa;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+.app{max-width:1100px;margin:0 auto;padding:2rem 1.5rem;}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid var(--border);}
+.brand{font-weight:800;font-size:1.2rem;letter-spacing:-.02em;}
+nav{display:flex;gap:1rem;align-items:center;}
+nav a{color:var(--text);text-decoration:none;font-size:.9rem;}
+.theme-btn{background:transparent;border:1px solid var(--border);color:var(--text);padding:.3rem .8rem;border-radius:6px;cursor:pointer;}
+h1{font-size:clamp(2.2rem,5vw,3.2rem);font-weight:800;letter-spacing:-.04em;margin:.5rem 0;}
+h2{font-size:1.5rem;font-weight:700;margin:2rem 0 .75rem;}
+h3{font-size:1.1rem;margin:.5rem 0;}
+.sub{color:var(--muted);font-size:1.1rem;margin-bottom:1rem;}
+.flow{font-family:'IBM Plex Mono',monospace;font-size:.85rem;letter-spacing:.05em;color:var(--muted);margin:1.5rem 0;padding:1rem;border:1px solid var(--border);border-radius:8px;text-align:center;}
+section{padding:1.5rem 0;}
+.codecols{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.code{font-family:'IBM Plex Mono',monospace;font-size:.78rem;background:#0a1120;color:#cbd5e1;padding:1rem;border-radius:8px;overflow:auto;max-height:400px;white-space:pre;}
+.resultcols{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.resultcols pre{font-family:'IBM Plex Mono',monospace;font-size:.78rem;background:#0a1120;color:#cbd5e1;padding:1rem;border-radius:8px;white-space:pre-wrap;}
+.primary{background:var(--accent);color:#fff;border:none;padding:.7rem 1.4rem;border-radius:8px;font-weight:600;cursor:pointer;margin-top:.5rem;}
+select{padding:.5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);}
+.green{color:#16a34a;font-weight:700;}
+.red{color:#dc2626;font-weight:700;}
+ul{padding-left:1.2rem;color:var(--muted);}
+@media(max-width:768px){.codecols,.resultcols{grid-template-columns:1fr;}}
