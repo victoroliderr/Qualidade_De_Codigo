@@ -5,7 +5,9 @@ import json, subprocess, os
 ROOT = Path(__file__).resolve().parent
 css = (ROOT / "public" / "styles.css").read_text(encoding="utf-8")
 
-app, rt = fast_app()
+_app, rt = fast_app()
+app = _app
+application = app
 
 THEME_SCRIPT = """
 <script>
@@ -129,4 +131,5 @@ def post(tipo: str):
         )
     )
 
-serve()
+if __name__ == "__main__":
+    serve()
