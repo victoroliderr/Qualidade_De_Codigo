@@ -5,7 +5,8 @@ import json, subprocess, os
 ROOT = Path(__file__).resolve().parent
 css = (ROOT / "public" / "styles.css").read_text(encoding="utf-8")
 
-_app, rt = fast_app()
+SESSION_SECRET = os.getenv("SESSION_SECRET", "codelab-dev-secret-change-me")
+_app, rt = fast_app(secret_key=SESSION_SECRET)
 app = _app
 application = app
 
