@@ -75,7 +75,8 @@ codelab/
 │   └── htmx.min.js
 ├── requirements.txt
 ├── .python-version
-├── vercel.json
+├── render.yaml                # blueprint do Render (Web Service ASGI)
+├── vercel.json                # configuração legada, para quem usar Vercel
 ├── .env.example
 └── README.md
 ```
@@ -134,33 +135,62 @@ Os testes cobrem:
 - formatação monetária em Kwanzas;
 - rotas, ficheiros estáticos, temas e localização.
 
-## Publicação no Vercel
+## Publicação no Render
 
-O projecto está preparado para o runtime Python do Vercel e para o modelo ASGI.
+O projecto está preparado para o runtime Python do Render e para o modelo ASGI.
+O ficheiro `render.yaml` descreve um **Web Service** com:
+
+- runtime Python e versão `3.12` (lida de `.python-version`);
+- build: `pip install -r requirements.txt`;
+- arranque: `uvicorn main:app --host 0.0.0.0 --port $PORT`, ou seja, ligação em
+  `0.0.0.0` e porta injectada pelo Render;
+- verificação de saúde em `/`;
+- `SESSKEY` gerada automaticamente pelo Render (`generateValue: true`) e
+  reutilizada em todos os arranques;
+- `PYTHONUNBUFFERED=1` para os logs surgirem sem espera.
+
+### Publicar com o blueprint (recomendado)
 
 1. Confirmar que `main.py` expõe a variável `app` no nível superior do módulo.
-2. Confirmar que o repositório contém `requirements.txt` com versões fixadas,
-   `.python-version` com `3.12` e `vercel.json` com a configuração mínima.
-3. Enviar o projecto para um repositório no GitHub.
-4. No Vercel, escolher **Add New → Project** e importar o repositório.
-5. Em **Settings → Environment Variables**, criar `SESSKEY` com uma chave estável
-   e secreta. Nunca colocar essa chave no Git. Sem esta variável, a aplicação
-   recusa arrancar no Vercel.
-6. Publicar. O Vercel detecta `main.py` como ponto de entrada ASGI.
+2. Enviar o projecto para um repositório no GitHub, GitLab ou Bitbucket.
+3. No Render, escolher **New → Blueprint** e ligar o repositório.
+4. Dar um nome ao projecto e carregar em **Apply**. O Render lê `render.yaml`,
+   instala as dependências e publica o serviço.
+5. Cada push para o ramo ligado gera uma nova publicação automática.
 
-O valor de `SESSKEY` tem de ser o mesmo em todos os arranques. A aplicação não
-escreve em ficheiros persistentes nem usa SQLite local em produção.
+### Publicar manualmente sem blueprint
 
-Para validar localmente antes de publicar, pode usar a CLI do Vercel:
+Se preferir criar o serviço pelo painel:
+
+1. **New → Web Service** e ligar o repositório.
+2. Language: **Python 3**; Build Command: `pip install -r requirements.txt`.
+3. Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`.
+4. Em **Environment**, adicionar `SESSKEY` com um valor longo e secreto
+   (botão **Generate** do painel). Não existe fallback inseguro: com `RENDER=true`,
+   a aplicação recusa arrancar se `SESSKEY` estiver ausente.
+5. Opcionalmente definir a região (o blueprint usa `frankfurt`) e o plano.
+
+O valor de `SESSKEY` tem de ser o mesmo em todos os arranques, caso contrário
+os cookies assinados deixam de ser válidos. Nunca o coloques no Git. A aplicação
+não escreve em ficheiros persistentes nem usa SQLite: o resumo apresentado é o
+que está confirmado em `data/resultados_testes.json`.
+
+O plano `free` suspende o serviço após 15 minutos sem tráfego. O primeiro pedido
+seguinte demora mais a responder; para manter o serviço sempre activo, escolher
+um plano pago no painel ou alterar `plan` no `render.yaml`.
+
+### Validar antes de publicar
+
+Podes reproduzir localmente o comando que o Render executa:
 
 ```bash
-npm install -g vercel
-vercel dev
+pip install -r requirements.txt
+PORT=8000 uvicorn main:app --host 0.0.0.0 --port $PORT
 ```
 
 Confirmar, na instância local:
 
-- a página inicial abre;
+- a página inicial abre em `/` e essa rota responde com estado 200;
 - os dois temas alternam e a escolha permanece após actualizar;
 - a navegação por âncoras funciona;
 - a comparação devolve os valores correctos;
@@ -171,7 +201,13 @@ Confirmar, na instância local:
 
 > Este repositório está preparado para publicação, mas nenhuma publicação de
 > produção é afirmada neste documento. A publicação só existe depois de ser feita
-> efectivamente no painel do Vercel.
+> efectivamente no painel do Render.
+
+### Alternativa: Vercel
+
+Os ficheiros `vercel.json` e `.vercelignore` mantêm-se para quem ainda publicar
+no Vercel. Nesse caso, definir `SESSKEY` nas variáveis de ambiente do Vercel;
+também aí a aplicação recusa arrancar sem a chave.
 
 ## Roteiro de demonstração (3 a 5 minutos)
 

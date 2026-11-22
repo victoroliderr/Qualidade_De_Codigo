@@ -1,0 +1,19 @@
+# Blueprint do Render: um Web Service ASGI para o CODELAB.
+# Documentação: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: codelab
+    runtime: python
+    plan: free
+    # Região europeia mais próxima de Angola; pode ser alterada no painel.
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      # Gerada uma vez pelo Render e reutilizada em todos os arranques.
+      - key: SESSKEY
+        generateValue: true
+      - key: PYTHONUNBUFFERED
+        value: "1"

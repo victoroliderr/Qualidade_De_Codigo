@@ -1,4 +1,4 @@
-"""CODELAB — ponto de entrada ASGI para execução local e Vercel.
+"""CODELAB — ponto de entrada ASGI para execução local e publicação no Render.
 
 A aplicação é uma página única em FastHTML. A demonstração executa as duas
 implementações reais em Python e devolve o resultado através de HTMX.
@@ -17,15 +17,28 @@ from services.processamento import (
     exemplo_por_tipo,
 )
 
-# Chave estável para cookies assinados. Em produção, define SESSKEY no Vercel.
-# O valor de recurso local evita gerar uma chave diferente em cada arranque.
-SESSKEY = os.getenv("SESSKEY")
-if not SESSKEY:
-    if os.getenv("VERCEL"):
+# O Render e o Vercel sinalizam o ambiente através de uma variável própria.
+# Nesses ambientes a chave tem de vir das variáveis de ambiente da plataforma.
+PLATAFORMAS_PRODUCAO = ("RENDER", "VERCEL")
+CHAVE_LOCAL = "codelab-desenvolvimento-local"
+
+
+def chave_sessao() -> str:
+    """Devolve a chave estável dos cookies; recusa arrancar sem chave em produção."""
+    chave = os.getenv("SESSKEY")
+    if chave:
+        return chave
+
+    if any(os.getenv(nome) for nome in PLATAFORMAS_PRODUCAO):
         raise RuntimeError(
-            "Define a variável de ambiente SESSKEY antes de publicar no Vercel."
+            "Define a variável de ambiente SESSKEY antes de publicar a aplicação."
         )
-    SESSKEY = "codelab-desenvolvimento-local"
+
+    # Em desenvolvimento, um valor fixo evita invalidar os cookies a cada arranque.
+    return CHAVE_LOCAL
+
+
+SESSKEY = chave_sessao()
 
 app, rt = fast_app(
     pico=False,
