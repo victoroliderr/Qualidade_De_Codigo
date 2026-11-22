@@ -1,0 +1,12 @@
+.venv/
+.venv2/
+.git/
+__pycache__/
+.pytest_cache/
+.agents/
+.claude/
+*.pyc
+*.pyo
+*.docx
+.vercel/
+.env.local

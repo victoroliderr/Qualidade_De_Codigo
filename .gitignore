@@ -3,7 +3,12 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
-.streamlit/secrets.toml
 .sesskey
+.env
+.env.local
+.vercel/
 .agents/
 .claude/
+.DS_Store
+.vercel
+.env*

@@ -1,2 +1,4 @@
 python-fasthtml==0.14.19
-pytest>=8.0.0
+Pygments==2.21.0
+uvicorn==0.54.0
+pytest==9.2.0

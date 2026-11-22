@@ -1,22 +1,86 @@
 # CODELAB — Qualidade do Código e Refatoração
 
-Laboratório interactivo em **Python + Streamlit** que demonstra, com execução real, a
-refatoração do processamento de pedidos de uma loja virtual. A aplicação compara a
-implementação original com uma versão refatorada, mostra os dois códigos reais, calcula
-o diff, executa as duas versões com os mesmos dados e corre uma suíte de testes com
-**pytest**.
+Laboratório académico em **Python + FastHTML** que compara duas implementações do
+mesmo programa: o processamento de encomendas de uma loja virtual. As duas versões
+são executadas com os mesmos dados e os resultados são apresentados lado a lado.
 
-O cenário principal é o processamento de pedidos (clientes **COMUM**, **VIP** e
-**PREMIUM**).
+O objectivo é demonstrar, com execução real, que a refatoração melhora a organização
+interna do código sem alterar o comportamento externo.
+
+- Página única, com navegação curta: **Demonstração**, **Comparação** e **Conceitos**.
+- Tema claro e tema escuro, com a escolha guardada no navegador.
+- Interface integralmente em **português de Angola** (`lang="pt-AO"`).
+- Valores exclusivamente em **Kwanza angolano (Kz)**.
+- Resultados, facturas e testes reais. Não existem valores simulados.
+
+## Como funciona a demonstração
+
+O utilizador escolhe um tipo de cliente — **COMUM**, **VIP** ou **PREMIUM** — e
+carrega em **COMPARAR AS DUAS VERSÕES**. A aplicação:
+
+1. executa `implementacoes/pedido_original.py`;
+2. executa `implementacoes/pedido_refatorado.py`;
+3. usa exactamente os mesmos dados nas duas versões;
+4. compara os valores devolvidos e as facturas emitidas;
+5. apresenta os painéis **ANTES — Código Original** e **DEPOIS — Código Refatorado**.
+
+Quando o valor e a factura coincidem, a interface confirma
+**COMPORTAMENTO PRESERVADO**.
+
+| Cliente | Desconto | Exemplo   | Total          |
+| ------- | -------: | --------- | -------------- |
+| COMUM   |       0% | 100.000 Kz | 100.000,00 Kz |
+| VIP     |      10% | 100.000 Kz | 90.000,00 Kz  |
+| PREMIUM |      15% | 200.000 Kz | 170.000,00 Kz |
+
+Os valores são ilustrativos e não representam preços de mercado.
 
 ## Tecnologias
 
-- Python 3.10+
-- Streamlit
-- pytest
-- HTML/CSS para a camada visual
+- Python 3.12
+- FastHTML (ASGI, componentes em Python)
+- HTMX para a actualização do painel de resultados
+- Pygments para o realce de sintaxe Python
+- pytest para os testes
+- CSS próprio, sem frameworks de interface
 
-## Instalação
+Não existem React, Next.js, Vue ou TypeScript no projecto.
+
+## Estrutura
+
+```text
+codelab/
+├── main.py                     # aplicação ASGI e rotas
+├── implementacoes/
+│   ├── pedido_original.py      # uma função com várias responsabilidades
+│   └── pedido_refatorado.py    # quatro funções especializadas
+├── services/
+│   ├── moeda.py                # formatar_kwanzas()
+│   └── processamento.py        # execução, exemplos e relatório de testes
+├── components/
+│   ├── layout.py               # estrutura da página, cabeçalho e temas
+│   ├── demonstracao.py         # selector de cliente e painel de resultados
+│   ├── comparacao.py           # comparação dos ficheiros reais
+│   ├── validacao.py            # resumo da última execução do pytest
+│   ├── conceitos.py            # atributos de qualidade e técnica aplicada
+│   └── base.py                 # cabeçalho comum das secções
+├── tests/
+│   ├── test_processamento_pedidos.py
+│   ├── test_interface.py
+│   └── conftest.py             # exporta os resultados reais do pytest
+├── data/
+│   └── resultados_testes.json  # último relatório real, lido pela interface
+├── public/
+│   ├── styles.css
+│   └── htmx.min.js
+├── requirements.txt
+├── .python-version
+├── vercel.json
+├── .env.example
+└── README.md
+```
+
+## Instalação local
 
 Na pasta do projecto:
 
@@ -37,97 +101,112 @@ python -m pip install -r requirements.txt
 ## Executar a aplicação
 
 ```bash
-streamlit run app.py
+uvicorn main:app --reload
 ```
 
-O Streamlit abre a aplicação no navegador. Se não abrir automaticamente, acede a
-`http://localhost:8501`.
+Abrir `http://127.0.0.1:8000`. A página inicial já apresenta o exemplo VIP, por isso
+a demonstração está visível sem qualquer clique.
 
 ## Executar os testes
 
 ```bash
-python -m pytest tests/test_processamento_pedidos.py -v
+pytest -q
 ```
 
-A página **Testes Automatizados** também executa o pytest num subprocesso real e
-apresenta o estado, a duração, o esperado, o obtido e a consola de execução. Para isso,
-o pytest tem de estar instalado no mesmo ambiente Python que corre o Streamlit.
+Para actualizar o resumo apresentado na interface com uma execução real:
 
-## Estrutura
-
-```text
-.
-├── app.py
-├── pages/
-│   ├── 01_Visao_Geral.py
-│   ├── 02_Laboratorio.py
-│   ├── 03_Comparacao.py
-│   ├── 04_Testes.py
-│   ├── 05_Qualidade.py
-│   ├── 06_Code_Smells.py
-│   ├── 07_Refatoracao.py
-│   ├── 08_Ferramentas.py
-│   └── 09_Referencias.py
-├── implementacoes/
-│   ├── pedido_original.py
-│   └── pedido_refatorado.py
-├── tests/
-│   ├── conftest.py
-│   └── test_processamento_pedidos.py
-├── components/
-│   └── componentes_visuais.py
-├── assets/
-│   └── estilos.css
-├── requirements.txt
-└── README.md
+```bash
+CODELAB_RESULTS_PATH=data/resultados_testes.json pytest -q
 ```
 
-A interface não contém uma segunda implementação escondida: a página do laboratório
-importa `implementacoes/pedido_original.py` e `implementacoes/pedido_refatorado.py`.
-As faturas são capturadas com `io.StringIO` e `contextlib.redirect_stdout`, e cada
-versão recebe uma cópia profunda e independente do pedido.
+O ficheiro `data/resultados_testes.json` é lido pela aplicação. O servidor **não
+executa pytest**: em produção, o resumo corresponde à última execução feita no
+terminal ou na CI. Depois de actualizar o relatório, confirma o ficheiro no Git
+para que a versão publicada apresente os novos resultados.
 
-## Regras do exemplo
+Os testes cobrem:
 
-| Tipo de cliente | Desconto |
-|---|---:|
-| COMUM | 0% |
-| VIP | 10% |
-| PREMIUM | 15% |
+- cliente COMUM, sem desconto;
+- cliente VIP, com 10% de desconto;
+- cliente PREMIUM, com 15% de desconto;
+- encomendas com vários produtos e quantidades;
+- igualdade de valor e de factura entre as duas implementações;
+- formatação monetária em Kwanzas;
+- rotas, ficheiros estáticos, temas e localização.
 
-Casos oficiais do relatório:
+## Publicação no Vercel
 
-| Exemplo | Pedido | Resultado |
-|---|---|---:|
-| João Silva (COMUM) | 50,00 × 2 | R$ 100,00 |
-| Maria Santos (VIP) | 100,00 × 1 | R$ 90,00 |
-| Empresa XYZ (PREMIUM) | 200,00 × 1 | R$ 170,00 |
+O projecto está preparado para o runtime Python do Vercel e para o modelo ASGI.
 
-## Roteiro de demonstração para a defesa
+1. Confirmar que `main.py` expõe a variável `app` no nível superior do módulo.
+2. Confirmar que o repositório contém `requirements.txt` com versões fixadas,
+   `.python-version` com `3.12` e `vercel.json` com a configuração mínima.
+3. Enviar o projecto para um repositório no GitHub.
+4. No Vercel, escolher **Add New → Project** e importar o repositório.
+5. Em **Settings → Environment Variables**, criar `SESSKEY` com uma chave estável
+   e secreta. Nunca colocar essa chave no Git. Sem esta variável, a aplicação
+   recusa arrancar no Vercel.
+6. Publicar. O Vercel detecta `main.py` como ponto de entrada ASGI.
 
-1. **Apresentação** — abrir a **Visão Geral** e explicar o propósito do laboratório:
-   melhorar a estrutura interna sem alterar o comportamento externo.
-2. **Cenário original** — abrir **Comparação de Código**, painel *Before*, e mostrar que
-   `processar_pedido` concentra cálculo, desconto e fatura.
-3. **Executar o pedido** — abrir **Laboratório Prático**, escolher o exemplo **VIP**
-   (`Maria Santos`) e clicar em **EXECUTAR COMPARAÇÃO**.
-4. **Mostrar o resultado** — confirmar que as duas versões produzem a mesma fatura e
-   R$ 90,00; destacar a mensagem **COMPORTAMENTO PRESERVADO**.
-5. **Comparar o código** — voltar a **Comparação de Código** e alternar entre
-   *Lado a lado*, *Original*, *Refatorado* e *Diferenças*.
-6. **Explicar as técnicas** — identificar **Extrair Método** nas quatro funções e
-   explicar o dicionário `taxas_desconto` como organização extensível das regras.
-7. **Executar os testes** — abrir **Testes Automatizados**, clicar em
-   **EXECUTAR TESTES AUTOMATIZADOS** e percorrer os seis resultados e a consola.
-8. **Concluir** — relacionar as alterações com legibilidade, manutenibilidade,
-   reutilização, eficiência e confiabilidade; referir que não são inventadas métricas.
+O valor de `SESSKEY` tem de ser o mesmo em todos os arranques. A aplicação não
+escreve em ficheiros persistentes nem usa SQLite local em produção.
 
-## Notas de rigor
+Para validar localmente antes de publicar, pode usar a CLI do Vercel:
 
-- As páginas **Ferramentas e Métricas** e **Qualidade do Código** explicam métricas
-  (complexidade ciclomática, cobertura e acoplamento) sem apresentar valores que não
-  foram medidos.
-- A análise estática não é executada pela aplicação; Pylint, SonarQube e ESLint são
-  apresentados com as respectivas linguagens e limitações.
-- Os resultados dos testes apresentados na interface vêm de um relatório JSON gerado
-  pelo pytest durante a execução, não de valores estáticos.
+```bash
+npm install -g vercel
+vercel dev
+```
+
+Confirmar, na instância local:
+
+- a página inicial abre;
+- os dois temas alternam e a escolha permanece após actualizar;
+- a navegação por âncoras funciona;
+- a comparação devolve os valores correctos;
+- as facturas estão em Kz;
+- os painéis de código mostram os ficheiros reais;
+- `/styles.css` e `/htmx.min.js` são servidos;
+- não existem erros nas rotas.
+
+> Este repositório está preparado para publicação, mas nenhuma publicação de
+> produção é afirmada neste documento. A publicação só existe depois de ser feita
+> efectivamente no painel do Vercel.
+
+## Roteiro de demonstração (3 a 5 minutos)
+
+1. **Introdução** — mostrar a página inicial e explicar que serão comparadas duas
+   implementações do mesmo programa.
+2. **Demonstração** — seleccionar o cliente **VIP** e carregar em
+   **COMPARAR AS DUAS VERSÕES**.
+3. **Resultado** — mostrar que as duas implementações produzem
+   **90.000,00 Kz** e que a interface confirma **COMPORTAMENTO PRESERVADO**.
+4. **Código** — descer até **O QUE MUDOU NO CÓDIGO?** e explicar que a função
+   original acumulava cálculo, desconto e factura, enquanto a versão refatorada
+   separou:
+   - `calcular_valor_base()`
+   - `aplicar_desconto_cliente()`
+   - `emitir_fatura_impressa()`
+   - `processar_pedido()`
+5. **Validação** — apresentar o resumo real dos testes automatizados.
+6. **Conclusão** — a refatoração melhorou a legibilidade, a manutenibilidade e a
+   reutilização sem alterar o comportamento esperado.
+
+## Regras de localização e moeda
+
+- Idioma do documento: `pt-AO`.
+- Terminologia preferida: **utilizador**, **ecrã**, **registo**, **ficheiro**,
+  **telemóvel**, **partilhar ficheiro**, **entrega**, **encomenda**.
+- Moeda única: **Kz (Kwanza angolano)**.
+- Formatação central em `services/moeda.py`:
+
+```python
+formatar_kwanzas(valor)  # 100000.0 -> "100.000,00 Kz"
+```
+
+
+## Licença e contexto
+
+Projecto académico de Engenharia de Software, na área de Qualidade do Código e
+Refatoração. O documento escrito do grupo (`qualidade_de_codigo.docx`) complementa
+esta demonstração prática.

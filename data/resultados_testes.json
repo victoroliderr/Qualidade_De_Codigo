@@ -1,0 +1,129 @@
+{
+  "exitstatus": 0,
+  "gerado_em": "2026-11-07T04:33:02+01:00",
+  "resultados": [
+    {
+      "nodeid": "tests/test_interface.py::test_pagina_inicial_em_portugues_de_angola",
+      "nome": "test_pagina_inicial_em_portugues_de_angola",
+      "estado": "passed",
+      "duracao": 0.0881,
+      "descricao": "Página inicial em português de Angola",
+      "esperado": "",
+      "obtido": "",
+      "detalhe": ""
+    },
+    {
+      "nodeid": "tests/test_interface.py::test_ficheiros_estaticos_servidos",
+      "nome": "test_ficheiros_estaticos_servidos",
+      "estado": "passed",
+      "duracao": 0.0373,
+      "descricao": "Ficheiros estáticos servidos",
+      "esperado": "",
+      "obtido": "",
+      "detalhe": ""
+    },
+    {
+      "nodeid": "tests/test_interface.py::test_comparacao_sem_javascript_devolve_pagina_completa",
+      "nome": "test_comparacao_sem_javascript_devolve_pagina_completa",
+      "estado": "passed",
+      "duracao": 0.0433,
+      "descricao": "Comparação sem JavaScript devolve a página completa",
+      "esperado": "",
+      "obtido": "",
+      "detalhe": ""
+    },
+    {
+      "nodeid": "tests/test_interface.py::test_comparacao_com_htmx_devolve_apenas_o_painel",
+      "nome": "test_comparacao_com_htmx_devolve_apenas_o_painel",
+      "estado": "passed",
+      "duracao": 0.0058,
+      "descricao": "Comparação com HTMX devolve apenas o painel",
+      "esperado": "",
+      "obtido": "",
+      "detalhe": ""
+    },
+    {
+      "nodeid": "tests/test_interface.py::test_sem_moeda_brasileira_na_pagina",
+      "nome": "test_sem_moeda_brasileira_na_pagina",
+      "estado": "passed",
+      "duracao": 0.0421,
+      "descricao": "Ausência de moeda brasileira na página",
+      "esperado": "",
+      "obtido": "",
+      "detalhe": ""
+    },
+    {
+      "nodeid": "tests/test_processamento_pedidos.py::test_cliente_comum",
+      "nome": "test_cliente_comum",
+      "estado": "passed",
+      "duracao": 0.0004,
+      "descricao": "Cliente COMUM — sem desconto",
+      "esperado": "100.000,00 Kz",
+      "obtido": "Original 100.000,00 Kz · Refatorado 100.000,00 Kz",
+      "detalhe": ""
+    },
+    {
+      "nodeid": "tests/test_processamento_pedidos.py::test_cliente_vip",
+      "nome": "test_cliente_vip",
+      "estado": "passed",
+      "duracao": 0.0002,
+      "descricao": "Cliente VIP — desconto de 10%",
+      "esperado": "90.000,00 Kz",
+      "obtido": "Original 90.000,00 Kz · Refatorado 90.000,00 Kz",
+      "detalhe": ""
+    },
+    {
+      "nodeid": "tests/test_processamento_pedidos.py::test_cliente_premium",
+      "nome": "test_cliente_premium",
+      "estado": "passed",
+      "duracao": 0.0002,
+      "descricao": "Cliente PREMIUM — desconto de 15%",
+      "esperado": "170.000,00 Kz",
+      "obtido": "Original 170.000,00 Kz · Refatorado 170.000,00 Kz",
+      "detalhe": ""
+    },
+    {
+      "nodeid": "tests/test_processamento_pedidos.py::test_equivalencia_entre_implementacoes",
+      "nome": "test_equivalencia_entre_implementacoes",
+      "estado": "passed",
+      "duracao": 0.0002,
+      "descricao": "Equivalência de comportamento entre as duas versões",
+      "esperado": "Mesmo valor devolvido e fatura idêntica nas duas implementações",
+      "obtido": "Original 225.000,00 Kz · Refatorado 225.000,00 Kz · faturas iguais",
+      "detalhe": ""
+    },
+    {
+      "nodeid": "tests/test_processamento_pedidos.py::test_multiplos_produtos",
+      "nome": "test_multiplos_produtos",
+      "estado": "passed",
+      "duracao": 0.0002,
+      "descricao": "Múltiplos produtos — soma correcta",
+      "esperado": "130.000,00 Kz",
+      "obtido": "Original 130.000,00 Kz · Refatorado 130.000,00 Kz",
+      "detalhe": ""
+    },
+    {
+      "nodeid": "tests/test_processamento_pedidos.py::test_tipo_cliente_sem_desconto",
+      "nome": "test_tipo_cliente_sem_desconto",
+      "estado": "passed",
+      "duracao": 0.0002,
+      "descricao": "Tipo de cliente desconhecido — sem desconto",
+      "esperado": "100.000,00 Kz",
+      "obtido": "Original 100.000,00 Kz · Refatorado 100.000,00 Kz",
+      "detalhe": ""
+    },
+    {
+      "nodeid": "tests/test_processamento_pedidos.py::test_formatacao_kwanzas",
+      "nome": "test_formatacao_kwanzas",
+      "estado": "passed",
+      "duracao": 0.0001,
+      "descricao": "Formatação central de Kwanzas",
+      "esperado": "1.000,00 Kz · 50.000,00 Kz · 170.000,00 Kz",
+      "obtido": "1.000,00 Kz · 50.000,00 Kz · 170.000,00 Kz",
+      "detalhe": ""
+    }
+  ],
+  "aprovados": 12,
+  "falhados": 0,
+  "total": 12
+}

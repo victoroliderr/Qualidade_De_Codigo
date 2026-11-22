@@ -1,1 +1,1 @@
-from .componentes_visuais import *
+"""Componentes de interface do CODELAB (FastHTML)."""
