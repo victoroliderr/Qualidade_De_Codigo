@@ -76,6 +76,61 @@ SCRIPT_TEMA = """
 </script>
 """
 
+SCRIPT_MENU = """
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var botao = document.getElementById('menu-mobile');
+  var cabecalho = document.querySelector('.site-header');
+  var navegacao = document.getElementById('menu-navegacao');
+  if (!botao || !cabecalho || !navegacao) return;
+
+  function definirEtiqueta(texto) {
+    botao.setAttribute('aria-label', texto);
+    var textoOculto = botao.querySelector('.visually-hidden');
+    if (textoOculto) textoOculto.textContent = texto;
+  }
+
+  function fechar(devolverFoco) {
+    cabecalho.removeAttribute('data-menu');
+    botao.setAttribute('aria-expanded', 'false');
+    definirEtiqueta('Abrir menu de navegação');
+    if (devolverFoco) botao.focus();
+  }
+
+  botao.addEventListener('click', function () {
+    if (botao.getAttribute('aria-expanded') === 'true') {
+      fechar(false);
+      return;
+    }
+    cabecalho.setAttribute('data-menu', 'aberto');
+    botao.setAttribute('aria-expanded', 'true');
+    definirEtiqueta('Fechar menu de navegação');
+    var primeiroLink = navegacao.querySelector('a');
+    if (primeiroLink) primeiroLink.focus();
+  });
+
+  navegacao.addEventListener('click', function (evento) {
+    if (evento.target.closest('a')) fechar(false);
+  });
+
+  document.addEventListener('keydown', function (evento) {
+    if (evento.key === 'Escape' && botao.getAttribute('aria-expanded') === 'true') {
+      fechar(true);
+    }
+  });
+
+  document.addEventListener('click', function (evento) {
+    if (botao.getAttribute('aria-expanded') !== 'true') return;
+    if (!cabecalho.contains(evento.target)) fechar(false);
+  });
+
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 760) fechar(false);
+  });
+});
+</script>
+"""
+
 ICONE_SOL = (
     '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" '
     'stroke="currentColor" stroke-width="1.7" stroke-linecap="round" '
@@ -91,6 +146,17 @@ ICONE_LUA = (
     '<path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"></path></svg>'
 )
 
+ICONE_MENU = (
+    '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" '
+    'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" '
+    'aria-hidden="true">'
+    '<path class="barra barra-topo" d="M4 7h16"></path>'
+    '<path class="barra barra-meio" d="M4 12h16"></path>'
+    '<path class="barra barra-base" d="M4 17h16"></path></svg>'
+)
+
+MEMBROS_GRUPO = "Victor Pedro · Manuel Mendes · Luís Pedro · Miguel Bengui"
+
 
 def cabecalho() -> Header:
     return Header(
@@ -104,8 +170,21 @@ def cabecalho() -> Header:
                 A("Demonstração", href="/#demonstracao"),
                 A("Comparação", href="/#comparacao"),
                 A("Conceitos", href="/#conceitos"),
+                id="menu-navegacao",
                 cls="nav",
                 **{"aria-label": "Navegação principal"},
+            ),
+            Button(
+                Span(NotStr(ICONE_MENU), cls="icon-menu"),
+                Span("Abrir menu", cls="visually-hidden"),
+                id="menu-mobile",
+                cls="menu-toggle",
+                type="button",
+                **{
+                    "aria-controls": "menu-navegacao",
+                    "aria-expanded": "false",
+                    "aria-label": "Abrir menu de navegação",
+                },
             ),
             Button(
                 Span(NotStr(ICONE_LUA), cls="icon icon-lua"),
@@ -158,8 +237,7 @@ def hero() -> Section:
 
     return Section(
         P(
-            Span("Laboratório académico", cls="eyebrow-strong"),
-            Span("Python · FastHTML · pytest", cls="eyebrow-muted"),
+            Span(MEMBROS_GRUPO, cls="eyebrow-strong"),
             cls="eyebrow",
         ),
         H1(
@@ -215,7 +293,7 @@ def pagina(tipo_selecionado: str = TIPO_PREDEFINIDO, resultado: dict | None = No
             Meta(
                 name="description",
                 content=(
-                    "Laboratório académico que compara duas implementações do "
+                    "Trabalho académico que compara duas implementações do "
                     "mesmo programa e demonstra a refatoração sem alterar o "
                     "comportamento."
                 ),
@@ -229,18 +307,8 @@ def pagina(tipo_selecionado: str = TIPO_PREDEFINIDO, resultado: dict | None = No
             ),
             Meta(property="og:type", content="website"),
             Title("CODELAB — Qualidade do Código e Refatoração"),
-            Link(
-                rel="icon",
-                href=(
-                    "data:image/svg+xml,"
-                    "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E"
-                    "%3Crect width='32' height='32' rx='2' fill='%2318170f'/%3E"
-                    "%3Cg fill='none' stroke='%23e79a6c' stroke-width='2.2' "
-                    "stroke-linecap='square'%3E"
-                    "%3Cpath d='M13 10l-5 6 5 6'/%3E"
-                    "%3Cpath d='M19 10l5 6-5 6'/%3E%3C/g%3E%3C/svg%3E"
-                ),
-            ),
+            Link(rel="icon", href="/favicon.ico", sizes="any"),
+            Link(rel="icon", type="image/svg+xml", href="/favicon.svg"),
             Link(rel="preconnect", href="https://fonts.googleapis.com"),
             Link(
                 rel="preconnect",
@@ -259,6 +327,7 @@ def pagina(tipo_selecionado: str = TIPO_PREDEFINIDO, resultado: dict | None = No
             Link(rel="stylesheet", href="/styles.css"),
             Script(src="/htmx.min.js", defer=True),
             NotStr(SCRIPT_TEMA),
+            NotStr(SCRIPT_MENU),
         ),
         Body(
             A("Saltar para o conteúdo", href="#conteudo", cls="skip-link"),

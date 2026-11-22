@@ -54,7 +54,7 @@ def test_comparacao_sem_javascript_devolve_pagina_completa(cliente, record_prope
     assert resposta.status_code == 200
     assert "<html" in resposta.text.lower()
     assert "170.000,00 Kz" in resposta.text
-    assert "Empresa Kwanza" in resposta.text
+    assert "Empresa TIS Angola" in resposta.text
 
 
 def test_comparacao_com_htmx_devolve_apenas_o_painel(cliente, record_property):
@@ -70,7 +70,7 @@ def test_comparacao_com_htmx_devolve_apenas_o_painel(cliente, record_property):
     assert resposta.status_code == 200
     assert "<html" not in resposta.text.lower()
     assert "100.000,00 Kz" in resposta.text
-    assert "João Silva" in resposta.text
+    assert "Guilhermino João" in resposta.text
 
 
 def test_sem_moeda_brasileira_na_pagina(cliente, record_property):
@@ -79,3 +79,36 @@ def test_sem_moeda_brasileira_na_pagina(cliente, record_property):
 
     for termo in ("R$", "BRL", "USD", "Reais", "Dólares"):
         assert termo not in html
+
+
+def test_membros_do_grupo_substituem_tecnologias_no_cabecalho(cliente, record_property):
+    record_property("descricao", "Membros do grupo apresentados no início da página")
+    html = cliente.get("/").text
+
+    for nome in ("Victor Pedro", "Manuel Mendes", "Luís Pedro", "Miguel Bengui"):
+        assert nome in html
+
+    assert "Python · FastHTML · pytest" not in html
+    assert "Laboratório académico" not in html
+
+
+def test_menu_mobile_interativo(cliente, record_property):
+    record_property("descricao", "Menu mobile com botão acessível")
+    html = cliente.get("/").text
+
+    assert 'id="menu-mobile"' in html
+    assert 'aria-controls="menu-navegacao"' in html
+    assert 'aria-expanded="false"' in html
+    assert 'id="menu-navegacao"' in html
+    assert "DOMContentLoaded" in html
+
+
+def test_favicon_do_codelab_servido(cliente, record_property):
+    record_property("descricao", "Favicon do CODELAB servido nos dois formatos")
+    ico = cliente.get("/favicon.ico")
+    svg = cliente.get("/favicon.svg")
+
+    assert ico.status_code == 200
+    assert len(ico.content) > 100
+    assert svg.status_code == 200
+    assert "<svg" in svg.text

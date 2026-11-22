@@ -31,17 +31,17 @@ MESES = (
 # Exemplos demonstrativos em contexto angolano. Os valores são ilustrativos.
 EXEMPLOS = {
     "COMUM": {
-        "cliente": "João Silva",
+        "cliente": "Guilhermino João",
         "tipo_cliente": "COMUM",
         "itens": [{"preco": 50_000.0, "quantidade": 2}],
     },
     "VIP": {
-        "cliente": "Maria Santos",
+        "cliente": "Maria dos Santos",
         "tipo_cliente": "VIP",
         "itens": [{"preco": 100_000.0, "quantidade": 1}],
     },
     "PREMIUM": {
-        "cliente": "Empresa Kwanza",
+        "cliente": "Empresa TIS Angola",
         "tipo_cliente": "PREMIUM",
         "itens": [{"preco": 200_000.0, "quantidade": 1}],
     },

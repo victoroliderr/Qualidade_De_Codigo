@@ -80,7 +80,7 @@ def verificar_caso(pedido, esperado, record_property, descricao):
 def test_cliente_comum(record_property):
     """Cliente COMUM (0%) deve pagar 100.000,00 Kz."""
     pedido = {
-        "cliente": "João Silva",
+        "cliente": "Guilhermino João",
         "tipo_cliente": "COMUM",
         "itens": [{"preco": 50_000.0, "quantidade": 2}],
     }
@@ -90,7 +90,7 @@ def test_cliente_comum(record_property):
 def test_cliente_vip(record_property):
     """Cliente VIP (10%) deve pagar 90.000,00 Kz."""
     pedido = {
-        "cliente": "Maria Santos",
+        "cliente": "Maria dos Santos",
         "tipo_cliente": "VIP",
         "itens": [{"preco": 100_000.0, "quantidade": 1}],
     }
@@ -104,7 +104,7 @@ def test_cliente_vip(record_property):
 def test_cliente_premium(record_property):
     """Cliente PREMIUM (15%) deve pagar 170.000,00 Kz."""
     pedido = {
-        "cliente": "Empresa Kwanza",
+        "cliente": "Empresa TIS Angola",
         "tipo_cliente": "PREMIUM",
         "itens": [{"preco": 200_000.0, "quantidade": 1}],
     }

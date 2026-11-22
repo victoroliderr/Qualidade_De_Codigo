@@ -1,6 +1,6 @@
 # CODELAB — Qualidade do Código e Refatoração
 
-Laboratório académico em **Python + FastHTML** que compara duas implementações do
+Trabalho académico em **Python + FastHTML** que compara duas implementações do
 mesmo programa: o processamento de encomendas de uma loja virtual. As duas versões
 são executadas com os mesmos dados e os resultados são apresentados lado a lado.
 
@@ -8,6 +8,7 @@ O objectivo é demonstrar, com execução real, que a refatoração melhora a or
 interna do código sem alterar o comportamento externo.
 
 - Página única, com navegação curta: **Demonstração**, **Comparação** e **Conceitos**.
+- Menu de navegação que se abre e fecha em telemóveis, com gestos de toque e teclado.
 - Tema claro e tema escuro, com a escolha guardada no navegador.
 - Interface integralmente em **português de Angola** (`lang="pt-AO"`).
 - Valores exclusivamente em **Kwanza angolano (Kz)**.
@@ -72,7 +73,9 @@ codelab/
 │   └── resultados_testes.json  # último relatório real, lido pela interface
 ├── public/
 │   ├── styles.css
-│   └── htmx.min.js
+│   ├── htmx.min.js
+│   ├── favicon.ico
+│   └── favicon.svg
 ├── requirements.txt
 ├── .python-version
 ├── render.yaml                # blueprint do Render (Web Service ASGI)
